@@ -12,23 +12,39 @@ import main.Main;
 
 public class SynchronisingOptions {
 
+	/**
+	 * @param parent
+	 *            Der Pfad des Startverzeichnisses
+	 * @param child
+	 *            Der Pfad des Zielverzeichnisses
+	 */
 	public static void syncWithModifiedTime(String parent, String child) {
 
 		File parentF = new File(parent);
 		File childF = new File(child);
 
 		for (File current : parentF.listFiles()) {
+			// Jede Datei im Startverzeichnis auf Vorhandensein im Zielverzeichnis prüfen
 
-//			System.out.println("Checking " + current.getName());
+			// System.out.println("Checking " + current.getName());
 
 			if (!(Arrays.asList(childF.list()).contains(current.getName()))) {
+				// Zielverzeichnis enthält nicht die gerade untersuchte Datei
 
+				// Erstellen einer temporären Datei mit späterem Namen
+				// damit späterer Kopiervorgang möglich ist
 				File temp = new File(child + "\\" + current.getName());
 
 				try {
 					temp.createNewFile();
-				} catch (IOException e1) {
-					e1.printStackTrace();
+				} catch (IOException e) {
+					// Temporäre Datei konnte nicht erstellt werden
+					// Vorgang wird für diese Datei abgebrochen &
+					// und als fehlgeschlagen gewertet
+
+					e.printStackTrace();
+					Main.getGui().filesFailed++;
+					continue;
 				}
 
 			}
@@ -36,23 +52,29 @@ public class SynchronisingOptions {
 			for (File current2 : childF.listFiles()) {
 
 				if (current.getName().equals(current2.getName())) {
+					// zu untersuchende Datei und temporäre Datei gefunden
 
 					if (current.lastModified() != current2.lastModified()) {
+						// Änderungsdaten der Dateien unterscheiden sich
 
 						try {
+							// Temporäre Datei durch Datei aus dem Startverzeichnis ersetzen
+							// Vorgang für diese Datei beendet &
+							// als Erfolg gewertet
 
 							Files.copy(current.toPath(), current2.toPath(), StandardCopyOption.REPLACE_EXISTING);
-//							System.out.println("Copying of " + current.getName() + " succeeded!");
+							// System.out.println("Copying of " + current.getName() + " succeeded!");
 
 							Main.getGui().filesChanged++;
 
-						} catch (IOException e1) {
+						} catch (IOException e) {
+							// Ersetzen der temporären Datei fehlgeschlagen
+							// Vorgang wird für diese Datei abgebrochen &
+							// und als fehlgeschlagen gewertet
 
-//							System.out.println("Copying of " + current.getName() + " failed!");
-							e1.printStackTrace();
-
+							// System.out.println("Copying of " + current.getName() + " failed!");
+							e.printStackTrace();
 							Main.getGui().filesFailed++;
-
 						}
 
 					}
@@ -65,23 +87,39 @@ public class SynchronisingOptions {
 
 	}
 
+	/**
+	 * @param parent
+	 *            Der Pfad des Startverzeichnisses
+	 * @param child
+	 *            Der Pfad des Zielverzeichnisses
+	 */
 	public static void syncAll(String parent, String child) {
 
 		File parentF = new File(parent);
 		File childF = new File(child);
 
 		for (File current : parentF.listFiles()) {
+			// Jede Datei im Startverzeichnis auf Vorhandensein im Zielverzeichnis prüfen
 
-//			System.out.println("Checking " + current.getName());
+			// System.out.println("Checking " + current.getName());
 
 			if (!(Arrays.asList(childF.list()).contains(current.getName()))) {
+				// Zielverzeichnis enthält nicht die gerade untersuchte Datei
 
+				// Erstellen einer temporären Datei mit späterem Namen
+				// damit späterer Kopiervorgang möglich ist
 				File temp = new File(child + "\\" + current.getName());
 
 				try {
 					temp.createNewFile();
-				} catch (IOException e1) {
-					e1.printStackTrace();
+				} catch (IOException e) {
+					// Temporäre Datei konnte nicht erstellt werden
+					// Vorgang wird für diese Datei abgebrochen &
+					// und als fehlgeschlagen gewertet
+
+					e.printStackTrace();
+					Main.getGui().filesFailed++;
+					continue;
 				}
 
 			}
@@ -89,19 +127,25 @@ public class SynchronisingOptions {
 			for (File current2 : childF.listFiles()) {
 
 				if (current.getName().equals(current2.getName())) {
+					// zu untersuchende Datei und temporäre Datei gefunden
 
 					try {
+						// Temporäre Datei durch Datei aus dem Startverzeichnis ersetzen
+						// Vorgang für diese Datei beendet &
+						// als Erfolg gewertet
 
 						Files.copy(current.toPath(), current2.toPath(), StandardCopyOption.REPLACE_EXISTING);
-//						System.out.println("Copying of " + current.getName() + " succeeded!");
+						// System.out.println("Copying of " + current.getName() + " succeeded!");
 
 						Main.getGui().filesChanged++;
 
-					} catch (IOException e1) {
+					} catch (IOException e) {
+						// Ersetzen der temporären Datei fehlgeschlagen
+						// Vorgang wird für diese Datei abgebrochen &
+						// und als fehlgeschlagen gewertet
 
-//						System.out.println("Copying of " + current.getName() + " failed!");
-						e1.printStackTrace();
-
+						// System.out.println("Copying of " + current.getName() + " failed!");
+						e.printStackTrace();
 						Main.getGui().filesFailed++;
 
 					}
@@ -114,6 +158,12 @@ public class SynchronisingOptions {
 
 	}
 
+	/**
+	 * @param parent
+	 *            Der Pfad des Startverzeichnisses
+	 * @param child
+	 *            Der Pfad des Zielverzeichnisses
+	 */
 	public static void syncWithContentChange(String parent, String child) {
 
 		File parentF = new File(parent);
@@ -122,17 +172,27 @@ public class SynchronisingOptions {
 		FileInputStream in1 = null, in2 = null;
 
 		for (File current : parentF.listFiles()) {
+			// Jede Datei im Startverzeichnis auf Vorhandensein im Zielverzeichnis prüfen
 
-//			System.out.println("Checking " + current.getName());
+			// System.out.println("Checking " + current.getName());
 
 			if (!(Arrays.asList(childF.list()).contains(current.getName()))) {
+				// Zielverzeichnis enthält nicht die gerade untersuchte Datei
 
+				// Erstellen einer temporären Datei mit späterem Namen
+				// damit späterer Kopiervorgang möglich ist
 				File temp = new File(child + "\\" + current.getName());
 
 				try {
 					temp.createNewFile();
-				} catch (IOException e1) {
-					e1.printStackTrace();
+				} catch (IOException e) {
+					// Temporäre Datei konnte nicht erstellt werden
+					// Vorgang wird für diese Datei abgebrochen &
+					// und als fehlgeschlagen gewertet
+
+					e.printStackTrace();
+					Main.getGui().filesFailed++;
+					continue;
 				}
 
 			}
@@ -140,6 +200,7 @@ public class SynchronisingOptions {
 			for (File current2 : childF.listFiles()) {
 
 				if (current.getName().equals(current2.getName())) {
+					// zu untersuchende Datei und temporäre Datei gefunden
 
 					try {
 
@@ -153,10 +214,11 @@ public class SynchronisingOptions {
 					int c1 = 0, c2 = 0;
 
 					try {
+						// Überprüfen auf Unterschiede in den beiden Dateien
 
 						while (c1 != -1 && c2 != -1) {
 
-							if (c1 != c2)
+							if (c1 != c2) // Unterschied gefunden
 								break;
 
 							c1 = in1.read();
@@ -168,23 +230,34 @@ public class SynchronisingOptions {
 						in2.close();
 
 					} catch (IOException e) {
+						// Fehler beim Überprüfen auf Unterschiede in den beiden Dateien
+						// Vorgang wird für diese Datei abgebrochen &
+						// und als fehlgeschlagen gewertet
+
 						e.printStackTrace();
+						Main.getGui().filesFailed++;
+						continue;
 					}
 
 					if (c1 != c2) {
 
 						try {
+							// Temporäre Datei durch Datei aus dem Startverzeichnis ersetzen
+							// Vorgang für diese Datei beendet &
+							// als Erfolg gewertet
 
 							Files.copy(current.toPath(), current2.toPath(), StandardCopyOption.REPLACE_EXISTING);
-//							System.out.println("Copying of " + current.getName() + " succeeded!");
+							// System.out.println("Copying of " + current.getName() + " succeeded!");
 
 							Main.getGui().filesChanged++;
 
 						} catch (IOException e1) {
+							// Ersetzen der temporären Datei fehlgeschlagen
+							// Vorgang wird für diese Datei abgebrochen &
+							// und als fehlgeschlagen gewertet
 
-//							System.out.println("Copying of " + current.getName() + " failed!");
+							// System.out.println("Copying of " + current.getName() + " failed!");
 							e1.printStackTrace();
-
 							Main.getGui().filesFailed++;
 
 						}
