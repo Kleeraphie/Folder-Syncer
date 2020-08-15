@@ -19,7 +19,7 @@ public class SynchronisingOptions {
 
 		for (File current : parentF.listFiles()) {
 
-			System.out.println("Checking " + current.getName());
+//			System.out.println("Checking " + current.getName());
 
 			if (!(Arrays.asList(childF.list()).contains(current.getName()))) {
 
@@ -42,13 +42,13 @@ public class SynchronisingOptions {
 						try {
 
 							Files.copy(current.toPath(), current2.toPath(), StandardCopyOption.REPLACE_EXISTING);
-							System.out.println("Copying of " + current.getName() + " succeeded!");
+//							System.out.println("Copying of " + current.getName() + " succeeded!");
 
 							Main.getGui().filesChanged++;
 
 						} catch (IOException e1) {
 
-							System.out.println("Copying of " + current.getName() + " failed!");
+//							System.out.println("Copying of " + current.getName() + " failed!");
 							e1.printStackTrace();
 
 							Main.getGui().filesFailed++;
@@ -72,7 +72,7 @@ public class SynchronisingOptions {
 
 		for (File current : parentF.listFiles()) {
 
-			System.out.println("Checking " + current.getName());
+//			System.out.println("Checking " + current.getName());
 
 			if (!(Arrays.asList(childF.list()).contains(current.getName()))) {
 
@@ -93,13 +93,13 @@ public class SynchronisingOptions {
 					try {
 
 						Files.copy(current.toPath(), current2.toPath(), StandardCopyOption.REPLACE_EXISTING);
-						System.out.println("Copying of " + current.getName() + " succeeded!");
+//						System.out.println("Copying of " + current.getName() + " succeeded!");
 
 						Main.getGui().filesChanged++;
 
 					} catch (IOException e1) {
 
-						System.out.println("Copying of " + current.getName() + " failed!");
+//						System.out.println("Copying of " + current.getName() + " failed!");
 						e1.printStackTrace();
 
 						Main.getGui().filesFailed++;
@@ -123,7 +123,7 @@ public class SynchronisingOptions {
 
 		for (File current : parentF.listFiles()) {
 
-			System.out.println("Checking " + current.getName());
+//			System.out.println("Checking " + current.getName());
 
 			if (!(Arrays.asList(childF.list()).contains(current.getName()))) {
 
@@ -176,13 +176,13 @@ public class SynchronisingOptions {
 						try {
 
 							Files.copy(current.toPath(), current2.toPath(), StandardCopyOption.REPLACE_EXISTING);
-							System.out.println("Copying of " + current.getName() + " succeeded!");
+//							System.out.println("Copying of " + current.getName() + " succeeded!");
 
 							Main.getGui().filesChanged++;
 
 						} catch (IOException e1) {
 
-							System.out.println("Copying of " + current.getName() + " failed!");
+//							System.out.println("Copying of " + current.getName() + " failed!");
 							e1.printStackTrace();
 
 							Main.getGui().filesFailed++;
