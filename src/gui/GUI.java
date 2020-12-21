@@ -66,6 +66,7 @@ public class GUI extends JFrame {
 	private void buildLabels() {
 		// Bau der einzelnen Labels im JFrame
 
+		c.anchor = GridBagConstraints.LINE_START;
 		c.fill = GridBagConstraints.VERTICAL;
 		c.gridx = 0;
 		c.gridy = 0;
@@ -92,18 +93,19 @@ public class GUI extends JFrame {
 
 	}
 
+	// TODO: JCB ist 1px kürzer als TextFields (sichtbar)
 	private void buildTextfields() {
 		// Bau der einzelnen Textfelder im JFrame
 
 		c.gridx = 1;
 		c.gridy = 0;
-		c.insets = new Insets(0, 0, 5, 3);
+		c.insets = new Insets(0, 2, 5, 0);
 
 		c.insets.top = 25;
 
 		// Textfeld für das Startverzeichnis
 		parent = new JTextField();
-		parent.setColumns(16);
+		parent.setColumns(15);
 		add(parent, c);
 
 		// Textfeld für das Zielverzeichnis
@@ -111,25 +113,17 @@ public class GUI extends JFrame {
 		c.insets.top = 0;
 
 		child = new JTextField();
-		child.setColumns(16);
+		child.setColumns(15);
 		add(child, c);
-
-	}
-
-	private void buildButtons() {
-		// Bau der einzelnen Buttons im JFrame
 
 		c.gridx = 1;
 		c.gridy = 2;
-		c.insets = new Insets(0, 0, 5, 25);
-
+		
 		jfc = new JFileChooser();
 		jfc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 
 		// Bau der JComboBox zur Auswahl des Sync-Modus
 		jcb = new JComboBox<String>();
-		jcb.setSize(200, 20);
-		jcb.setLocation(120, 120);
 
 		String[] jcbList = { "Änderungsdatum", "Alle", "Inhaltliche Änderung" };
 
@@ -137,6 +131,14 @@ public class GUI extends JFrame {
 			jcb.addItem(current);
 
 		add(jcb, c);
+		
+	}
+
+	private void buildButtons() {
+		// Bau der einzelnen Buttons im JFrame
+
+//		c.anchor = GridBagConstraints.CENTER;
+		c.insets = new Insets(0, 5, 5, 25);
 
 		c.gridx = 2;
 		c.gridy = 0;
@@ -191,7 +193,7 @@ public class GUI extends JFrame {
 
 		Image icon;
 		try {
-			icon = ImageIO.read(new File("src/images/directory.png"));
+			icon = ImageIO.read(new File("images/directory.png"));
 
 			parentB.setIcon(new ImageIcon(icon));
 			childB.setIcon(new ImageIcon(icon));
@@ -201,6 +203,7 @@ public class GUI extends JFrame {
 		}
 
 		// Button um die Synchronisierung zu beginnen
+		c.anchor = GridBagConstraints.CENTER;
 		c.gridx = 0;
 		c.gridy = 3;
 		c.insets = new Insets(16, 0, 25, 3);
@@ -293,7 +296,7 @@ public class GUI extends JFrame {
 
 			}
 		});
-		c.gridy = 5;
+		c.gridy = 3;
 		c.gridwidth = 3;
 		add(sync, c);
 
