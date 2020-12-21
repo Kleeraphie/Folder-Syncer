@@ -1,18 +1,24 @@
 package gui;
 
-import java.awt.Color;
-import java.awt.Font;
+import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Image;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.IOException;
 
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
-import javax.swing.SwingConstants;
 
 import synchroniser.SynchronisingOptions;
 
@@ -27,8 +33,95 @@ public class GUI extends JFrame {
 	private JButton parentB, childB, sync;
 	private JFileChooser jfc;
 	private JComboBox<String> jcb;
+	private GridBagConstraints c;
 
 	public GUI() {
+
+		// Bau der GUI
+		buildWindow();
+		buildLabels();
+		buildTextfields();
+		buildButtons();
+
+		pack();
+		setVisible(true);
+
+	}
+
+	private void buildWindow() {
+		// Bau des JFrames
+
+		c = new GridBagConstraints();
+
+		setSize(400, 300);
+		setTitle("FolderSyncer");
+		setLocationRelativeTo(null);
+		setDefaultCloseOperation(EXIT_ON_CLOSE);
+		setResizable(false);
+		requestFocus();
+		setLayout(new GridBagLayout());
+
+	}
+
+	private void buildLabels() {
+		// Bau der einzelnen Labels im JFrame
+
+		c.fill = GridBagConstraints.VERTICAL;
+		c.gridx = 0;
+		c.gridy = 0;
+		c.insets = new Insets(0, 25, 5, 3);
+
+		c.insets.top = 25;
+
+		parentL = new JLabel("Startverzeichnis:");
+		parentL.setSize(120, 20);
+		parentL.setLocation(20, 20);
+		add(parentL, c);
+
+		c.gridy = 1;
+		c.insets.top = 0;
+
+		childL = new JLabel("Zielverzeichnis:");
+		childL.setSize(100, 20);
+		childL.setLocation(20, 70);
+		add(childL, c);
+
+		c.gridy = 2;
+		syncMode = new JLabel("Sync-Modus:");
+		add(syncMode, c);
+
+	}
+
+	private void buildTextfields() {
+		// Bau der einzelnen Textfelder im JFrame
+
+		c.gridx = 1;
+		c.gridy = 0;
+		c.insets = new Insets(0, 0, 5, 3);
+
+		c.insets.top = 25;
+
+		// Textfeld für das Startverzeichnis
+		parent = new JTextField();
+		parent.setColumns(16);
+		add(parent, c);
+
+		// Textfeld für das Zielverzeichnis
+		c.gridy = 1;
+		c.insets.top = 0;
+
+		child = new JTextField();
+		child.setColumns(16);
+		add(child, c);
+
+	}
+
+	private void buildButtons() {
+		// Bau der einzelnen Buttons im JFrame
+
+		c.gridx = 1;
+		c.gridy = 2;
+		c.insets = new Insets(0, 0, 5, 25);
 
 		jfc = new JFileChooser();
 		jfc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
@@ -43,75 +136,15 @@ public class GUI extends JFrame {
 		for (String current : jcbList)
 			jcb.addItem(current);
 
-		add(jcb);
+		add(jcb, c);
 
-		// Bau der GUI
-		buildWindow();
-		buildLabels();
-		buildTextfields();
-		buildButtons();
-
-		setVisible(true);
-
-	}
-
-	private void buildWindow() {
-		// Bau des JFrames
-
-		setSize(400, 300);
-		setTitle("FolderSyncer");
-		setLocationRelativeTo(null);
-		setDefaultCloseOperation(EXIT_ON_CLOSE);
-		setResizable(false);
-		requestFocus();
-		setLayout(null);
-
-	}
-
-	private void buildLabels() {
-		// Bau der einzelnen Labels im JFrame
-
-		parentL = new JLabel("Startverzeichnis:");
-		parentL.setSize(120, 20);
-		parentL.setLocation(20, 20);
-		add(parentL);
-
-		childL = new JLabel("Zielverzeichnis:");
-		childL.setSize(100, 20);
-		childL.setLocation(20, 70);
-		add(childL);
-
-		syncMode = new JLabel("Sync-Modus:");
-		syncMode.setSize(100, 20);
-		syncMode.setLocation(20, 120);
-		add(syncMode);
-
-	}
-
-	private void buildTextfields() {
-		// Bau der einzelnen Textfelder im JFrame
-
-		// Textfeld für das Startverzeichnis
-		parent = new JTextField();
-		parent.setSize(200, 20);
-		parent.setLocation(120, 20);
-		add(parent);
-
-		// Textfeld für das Zielverzeichnis
-		child = new JTextField();
-		child.setSize(200, 20);
-		child.setLocation(120, 70);
-		add(child);
-
-	}
-
-	private void buildButtons() {
-		// Bau der einzelnen Buttons im JFrame
+		c.gridx = 2;
+		c.gridy = 0;
+		c.insets.top = 25;
 
 		// Button um das Startverzeichnis auszuwählen
 		parentB = new JButton();
-		parentB.setSize(20, 20);
-		parentB.setLocation(340, 20);
+		parentB.setPreferredSize(new Dimension(20, 20));
 		parentB.addActionListener(new ActionListener() {
 
 			@Override
@@ -125,12 +158,14 @@ public class GUI extends JFrame {
 
 			}
 		});
-		add(parentB);
+		add(parentB, c);
 
 		// Button um das Zielverzeichnis auszuwählen
+		c.gridy = 1;
+		c.insets.top = 0;
+
 		childB = new JButton();
-		childB.setSize(20, 20);
-		childB.setLocation(340, 70);
+		childB.setPreferredSize(new Dimension(20, 20));
 		childB.addActionListener(new ActionListener() {
 
 			@Override
@@ -152,112 +187,161 @@ public class GUI extends JFrame {
 
 			}
 		});
-		add(childB);
+		add(childB, c);
+
+		Image icon;
+		try {
+			icon = ImageIO.read(new File("src/images/directory.png"));
+
+			parentB.setIcon(new ImageIcon(icon));
+			childB.setIcon(new ImageIcon(icon));
+
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
 
 		// Button um die Synchronisierung zu beginnen
+		c.gridx = 0;
+		c.gridy = 3;
+		c.insets = new Insets(16, 0, 25, 3);
+
 		sync = new JButton("Synchronisieren");
-		sync.setSize(150, 20);
-		sync.setLocation(125, 240);
 		sync.addActionListener(new ActionListener() {
 
+			//TODO: vllt. klug returns setzen um rechenaufwand zu minimieren
 			@Override
 			public void actionPerformed(ActionEvent e) {
 
-				// Anzahl der Dateien, die geändert wurden &
-				// bei der ein Fehler während der Synchronisierung auftrat
-				filesChanged = 0;
-				filesFailed = 0;
+				if (checkEntries()) {
+					// Alle Pfade sind korrekt und nicht gleich
 
-				switch (String.valueOf(jcb.getSelectedItem())) {
+					// Anzahl der Dateien, die geändert wurden &
+					// bei der ein Fehler während der Synchronisierung auftrat
+					filesChanged = 0;
+					filesFailed = 0;
 
-				case ("Änderungsdatum"):
-					SynchronisingOptions.syncWithModifiedTime(parent.getText(), child.getText());
-					break;
+					switch (String.valueOf(jcb.getSelectedItem())) {
 
-				case ("Alle"):
-					SynchronisingOptions.syncAll(parent.getText(), child.getText());
-					break;
+					case ("Änderungsdatum"):
+						SynchronisingOptions.syncWithModifiedTime(parent.getText(), child.getText());
+						break;
 
-				case ("Inhaltliche Änderung"):
-					SynchronisingOptions.syncWithContentChange(parent.getText(), child.getText());
-					break;
+					case ("Alle"):
+						SynchronisingOptions.syncAll(parent.getText(), child.getText());
+						break;
 
-				}
+					case ("Inhaltliche Änderung"):
+						SynchronisingOptions.syncWithContentChange(parent.getText(), child.getText());
+						break;
 
-				// Leeren von den Labels
-				if (changedFiles != null)
-					changedFiles.setText("");
+					}
 
-				if (failedFiles != null)
-					failedFiles.setText("");
+					// Leeren von den Labels
+					if (changedFiles != null)
+						changedFiles.setText("");
 
-				if (filesChanged == new File(child.getText()).listFiles().length) {
-					// Anzahl der geänderten Dateien == der Anzahl der Dateien im Zielverzeichnis
+					if (failedFiles != null)
+						failedFiles.setText("");
 
-					changedFiles = new JLabel("Es wurden alle Dateien geändert.", SwingConstants.CENTER);
-					changedFiles.setForeground(new Color(17, 204, 0));
+					if (filesChanged == new File(child.getText()).listFiles().length) {
+						// Anzahl der geänderten Dateien == der Anzahl der Dateien im Zielverzeichnis
 
-					changedFiles.setLocation(0, 160);
+						String message = "Es wurden alle Dateien geändert.";
 
-				} else {
+						JOptionPane.showMessageDialog(null, message, "Erfolg!", JOptionPane.INFORMATION_MESSAGE);
 
-					if (filesChanged > 0) {
-						// Es wurden Dateien geändert, aber nicht alle
-
-						changedFiles = new JLabel(String.format("%s von %s Dateien geändert.", filesChanged,
-								new File(child.getText()).listFiles().length), SwingConstants.CENTER);
-						changedFiles.setForeground(new Color(17, 204, 0));
 					} else {
-						// Es wurden keine Dateien geändert
 
-						changedFiles = new JLabel("Es wurden keine Dateien geändert.", SwingConstants.CENTER);
-						changedFiles.setForeground(new Color(240, 200, 0)); // gelb
-					}
-					
-					changedFiles.setLocation(0, 160);
+						if (filesChanged > 0) {
+							// Es wurden Dateien geändert, aber nicht alle
 
-					if (filesFailed == new File(child.getText()).listFiles().length) {
-						// Beim Synchronisieren jeder Datei ist ein Fehler aufgetreten
+							String message = String.format("%s von %s Dateien geändert. Der Rest war gleich.",
+									filesChanged, new File(child.getText()).listFiles().length);
 
-						failedFiles = new JLabel("Keine Datei konnte geändert werden", SwingConstants.CENTER);
+							JOptionPane.showMessageDialog(null, message, "Warnung!", JOptionPane.WARNING_MESSAGE);
 
-						failedFiles.setForeground(Color.RED);
-						failedFiles.setFont(new Font("Tahoma", Font.PLAIN, 12));
-						failedFiles.setSize(getWidth(), 20);
-						failedFiles.setLocation(0, 180);
-						add(failedFiles);
+						} else {
+							// Es wurden keine Dateien geändert
 
-					} else if (filesFailed > 0) {
-						// Synchronisierung einiger Dateien ist fehl geschlagen
+							String message = "Es wurden keine Dateien geändert, da alle Dateien gleich sind.";
 
-						failedFiles = new JLabel(String.format("%s von %s Dateien konnten nicht geändert werden",
-								filesFailed, new File(child.getText()).listFiles().length), SwingConstants.CENTER);
+							JOptionPane.showMessageDialog(null, message, "Warnung!", JOptionPane.WARNING_MESSAGE);
 
-						failedFiles.setForeground(Color.RED);
-						failedFiles.setFont(new Font("Tahoma", Font.PLAIN, 12));
-						failedFiles.setSize(getWidth(), 20);
-						failedFiles.setLocation(0, 180);
-						add(failedFiles);
+						}
 
-						changedFiles.setLocation(0, 150);
+						if (filesFailed == new File(child.getText()).listFiles().length) {
+							// Beim Synchronisieren jeder Datei ist ein Fehler aufgetreten
+
+							String message = "Keine Datei konnte aufgrund eines Fehlers geändert werden.";
+
+							JOptionPane.showMessageDialog(null, message, "Fehler!", JOptionPane.ERROR_MESSAGE);
+
+						} else if (filesFailed > 0) {
+							// Synchronisierung einiger Dateien ist fehl geschlagen
+
+							String message = String.format(
+									"%s von %s Dateien konnten aufgrund eines Fehlers nicht geändert werden.",
+									filesFailed, new File(child.getText()).listFiles().length);
+
+							JOptionPane.showMessageDialog(null, message, "Fehler!", JOptionPane.ERROR_MESSAGE);
+
+						}
 
 					}
 
 				}
-
-				changedFiles.setFont(new Font("Tahoma", Font.PLAIN, 12));
-				changedFiles.setSize(getWidth(), 20);
-				add(changedFiles);
-
-				// JFrame neu laden, damit neues JPanel auch angezeigt wird
-				invalidate();
-				validate();
-				repaint();
 
 			}
 		});
-		add(sync);
+		c.gridy = 5;
+		c.gridwidth = 3;
+		add(sync, c);
 
+	}
+
+	private boolean checkEntries() {
+		if (parent.getText().equals("")) {
+
+			String message = "Im Feld \"Startverzeichnis\" muss ein Pfad angegeben sein!";
+
+			JOptionPane.showMessageDialog(this, message, "Fehler!", JOptionPane.ERROR_MESSAGE);
+
+			return false;
+
+		} else if (child.getText().equals("")) {
+
+			String message = "Im Feld \"Zielverzeichnis\" muss ein Pfad angegeben sein!";
+
+			JOptionPane.showMessageDialog(this, message, "Fehler!", JOptionPane.ERROR_MESSAGE);
+
+			return false;
+		}
+
+		if (!new File(parent.getText()).exists()) {
+			String message = "Das Startverzeichnis existiert nicht!";
+
+			JOptionPane.showMessageDialog(this, message, "Fehler!", JOptionPane.ERROR_MESSAGE);
+
+			return false;
+		} else if (!new File(child.getText()).exists()) {
+
+			String message = "Das Zielverzeichnis existiert nicht!";
+
+			JOptionPane.showMessageDialog(this, message, "Fehler!", JOptionPane.ERROR_MESSAGE);
+
+			return false;
+		}
+		
+		if (parent.getText().equals(child.getText())) {
+			
+			String message = "Das Start- und Zielverzeichnis sind identisch!";
+
+			JOptionPane.showMessageDialog(this, message, "Fehler!", JOptionPane.ERROR_MESSAGE);
+			
+			return false;
+		}
+
+		return true;
 	}
 
 }
