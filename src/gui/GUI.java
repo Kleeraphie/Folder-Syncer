@@ -27,10 +27,7 @@ public class GUI extends JFrame {
 	private static final long serialVersionUID = 2941318999657277463L;
 
 	public int filesChanged, filesFailed;
-
-	private JLabel parentL, childL, syncMode, changedFiles, failedFiles;
 	private JTextField parent, child;
-	private JButton parentB, childB, sync;
 	private JFileChooser jfc;
 	private JComboBox<String> jcb;
 	private GridBagConstraints c;
@@ -66,25 +63,23 @@ public class GUI extends JFrame {
 	private void buildLabels() {
 		// Bau der einzelnen Labels im JFrame
 
+		JLabel parentL, childL, syncMode;
+
 		c.anchor = GridBagConstraints.LINE_START;
 		c.fill = GridBagConstraints.VERTICAL;
 		c.gridx = 0;
 		c.gridy = 0;
-		c.insets = new Insets(0, 25, 5, 3);
+		c.insets = new Insets(0, 25, 5, 5);
 
 		c.insets.top = 25;
 
 		parentL = new JLabel("Startverzeichnis:");
-		parentL.setSize(120, 20);
-		parentL.setLocation(20, 20);
 		add(parentL, c);
 
 		c.gridy = 1;
 		c.insets.top = 0;
 
 		childL = new JLabel("Zielverzeichnis:");
-		childL.setSize(100, 20);
-		childL.setLocation(20, 70);
 		add(childL, c);
 
 		c.gridy = 2;
@@ -99,7 +94,7 @@ public class GUI extends JFrame {
 
 		c.gridx = 1;
 		c.gridy = 0;
-		c.insets = new Insets(0, 2, 5, 0);
+		c.insets = new Insets(0, 0, 5, 0);
 
 		c.insets.top = 25;
 
@@ -118,7 +113,7 @@ public class GUI extends JFrame {
 
 		c.gridx = 1;
 		c.gridy = 2;
-		
+
 		jfc = new JFileChooser();
 		jfc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 
@@ -131,13 +126,15 @@ public class GUI extends JFrame {
 			jcb.addItem(current);
 
 		add(jcb, c);
-		
+
 	}
 
 	private void buildButtons() {
 		// Bau der einzelnen Buttons im JFrame
 
-//		c.anchor = GridBagConstraints.CENTER;
+		JButton parentB, childB, sync, settings;
+		Image icon;
+
 		c.insets = new Insets(0, 5, 5, 25);
 
 		c.gridx = 2;
@@ -162,10 +159,10 @@ public class GUI extends JFrame {
 		});
 		add(parentB, c);
 
-		// Button um das Zielverzeichnis auszuwählen
 		c.gridy = 1;
 		c.insets.top = 0;
 
+		// Button um das Zielverzeichnis auszuwählen
 		childB = new JButton();
 		childB.setPreferredSize(new Dimension(20, 20));
 		childB.addActionListener(new ActionListener() {
@@ -191,7 +188,7 @@ public class GUI extends JFrame {
 		});
 		add(childB, c);
 
-		Image icon;
+		// Icon für die Pfad-Buttons laden und setzen
 		try {
 			icon = ImageIO.read(new File("images/directory.png"));
 
@@ -202,103 +199,51 @@ public class GUI extends JFrame {
 			e1.printStackTrace();
 		}
 
-		// Button um die Synchronisierung zu beginnen
 		c.anchor = GridBagConstraints.CENTER;
 		c.gridx = 0;
 		c.gridy = 3;
-		c.insets = new Insets(16, 0, 25, 3);
+		c.insets = new Insets(15, 0, 25, 3);
+		c.gridwidth = 3;
 
+		// Button um die Synchronisierung zu beginnen
 		sync = new JButton("Synchronisieren");
 		sync.addActionListener(new ActionListener() {
 
-			//TODO: vllt. klug returns setzen um rechenaufwand zu minimieren
+			// TODO: vllt. klug returns setzen um rechenaufwand zu minimieren
 			@Override
 			public void actionPerformed(ActionEvent e) {
 
-				if (checkEntries()) {
-					// Alle Pfade sind korrekt und nicht gleich
-
-					// Anzahl der Dateien, die geändert wurden &
-					// bei der ein Fehler während der Synchronisierung auftrat
-					filesChanged = 0;
-					filesFailed = 0;
-
-					switch (String.valueOf(jcb.getSelectedItem())) {
-
-					case ("Änderungsdatum"):
-						SynchronisingOptions.syncWithModifiedTime(parent.getText(), child.getText());
-						break;
-
-					case ("Alle"):
-						SynchronisingOptions.syncAll(parent.getText(), child.getText());
-						break;
-
-					case ("Inhaltliche Änderung"):
-						SynchronisingOptions.syncWithContentChange(parent.getText(), child.getText());
-						break;
-
-					}
-
-					// Leeren von den Labels
-					if (changedFiles != null)
-						changedFiles.setText("");
-
-					if (failedFiles != null)
-						failedFiles.setText("");
-
-					if (filesChanged == new File(child.getText()).listFiles().length) {
-						// Anzahl der geänderten Dateien == der Anzahl der Dateien im Zielverzeichnis
-
-						String message = "Es wurden alle Dateien geändert.";
-
-						JOptionPane.showMessageDialog(null, message, "Erfolg!", JOptionPane.INFORMATION_MESSAGE);
-
-					} else {
-
-						if (filesChanged > 0) {
-							// Es wurden Dateien geändert, aber nicht alle
-
-							String message = String.format("%s von %s Dateien geändert. Der Rest war gleich.",
-									filesChanged, new File(child.getText()).listFiles().length);
-
-							JOptionPane.showMessageDialog(null, message, "Warnung!", JOptionPane.WARNING_MESSAGE);
-
-						} else {
-							// Es wurden keine Dateien geändert
-
-							String message = "Es wurden keine Dateien geändert, da alle Dateien gleich sind.";
-
-							JOptionPane.showMessageDialog(null, message, "Warnung!", JOptionPane.WARNING_MESSAGE);
-
-						}
-
-						if (filesFailed == new File(child.getText()).listFiles().length) {
-							// Beim Synchronisieren jeder Datei ist ein Fehler aufgetreten
-
-							String message = "Keine Datei konnte aufgrund eines Fehlers geändert werden.";
-
-							JOptionPane.showMessageDialog(null, message, "Fehler!", JOptionPane.ERROR_MESSAGE);
-
-						} else if (filesFailed > 0) {
-							// Synchronisierung einiger Dateien ist fehl geschlagen
-
-							String message = String.format(
-									"%s von %s Dateien konnten aufgrund eines Fehlers nicht geändert werden.",
-									filesFailed, new File(child.getText()).listFiles().length);
-
-							JOptionPane.showMessageDialog(null, message, "Fehler!", JOptionPane.ERROR_MESSAGE);
-
-						}
-
-					}
-
-				}
+				if (checkEntries()) // Alle Pfade sind korrekt und nicht gleich
+					sync();
 
 			}
 		});
-		c.gridy = 3;
-		c.gridwidth = 3;
 		add(sync, c);
+
+		c.anchor = GridBagConstraints.LINE_END;
+		c.gridx = 1;
+		
+		settings = new JButton();
+		settings.setPreferredSize(new Dimension(32,32));
+		settings.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				new Settings();
+				
+			}
+		});
+		add(settings, c);
+		
+		// Icon für den Einstellungen-Button laden und setzen
+		try {
+			icon = ImageIO.read(new File("images/settings.png"));
+
+			settings.setIcon(new ImageIcon(icon));
+
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
 
 	}
 
@@ -334,17 +279,94 @@ public class GUI extends JFrame {
 
 			return false;
 		}
-		
+
 		if (parent.getText().equals(child.getText())) {
-			
+
 			String message = "Das Start- und Zielverzeichnis sind identisch!";
 
 			JOptionPane.showMessageDialog(this, message, "Fehler!", JOptionPane.ERROR_MESSAGE);
-			
+
 			return false;
 		}
 
 		return true;
+	}
+
+	private void sync() {
+
+		// Anzahl der Dateien, die geändert wurden &
+		// bei der ein Fehler während der Synchronisierung auftrat
+		filesChanged = 0;
+		filesFailed = 0;
+
+		switch (String.valueOf(jcb.getSelectedItem())) {
+
+		case ("Änderungsdatum"):
+			SynchronisingOptions.syncWithModifiedTime(parent.getText(), child.getText());
+			break;
+
+		case ("Alle"):
+			SynchronisingOptions.syncAll(parent.getText(), child.getText());
+			break;
+
+		case ("Inhaltliche Änderung"):
+			SynchronisingOptions.syncWithContentChange(parent.getText(), child.getText());
+			break;
+
+		}
+
+		showMessages();
+
+	}
+
+	private void showMessages() {
+
+		if (filesChanged == new File(child.getText()).listFiles().length) {
+			// Anzahl der geänderten Dateien == der Anzahl der Dateien im Zielverzeichnis
+
+			String message = "Es wurden alle Dateien geändert.";
+
+			JOptionPane.showMessageDialog(null, message, "Erfolg!", JOptionPane.INFORMATION_MESSAGE);
+
+		} else {
+
+			if (filesChanged > 0) {
+				// Es wurden Dateien geändert, aber nicht alle
+
+				String message = String.format("%s von %s Dateien geändert. Der Rest war gleich.", filesChanged,
+						new File(child.getText()).listFiles().length);
+
+				JOptionPane.showMessageDialog(null, message, "Warnung!", JOptionPane.WARNING_MESSAGE);
+
+			} else {
+				// Es wurden keine Dateien geändert
+
+				String message = "Es wurden keine Dateien geändert, da alle Dateien gleich sind.";
+
+				JOptionPane.showMessageDialog(null, message, "Warnung!", JOptionPane.WARNING_MESSAGE);
+
+			}
+
+			if (filesFailed == new File(child.getText()).listFiles().length) {
+				// Beim Synchronisieren jeder Datei ist ein Fehler aufgetreten
+
+				String message = "Keine Datei konnte aufgrund eines Fehlers geändert werden.";
+
+				JOptionPane.showMessageDialog(null, message, "Fehler!", JOptionPane.ERROR_MESSAGE);
+
+			} else if (filesFailed > 0) {
+				// Synchronisierung einiger Dateien ist fehl geschlagen
+
+				String message = String.format(
+						"%s von %s Dateien konnten aufgrund eines Fehlers nicht geändert werden.", filesFailed,
+						new File(child.getText()).listFiles().length);
+
+				JOptionPane.showMessageDialog(null, message, "Fehler!", JOptionPane.ERROR_MESSAGE);
+
+			}
+
+		}
+
 	}
 
 }
