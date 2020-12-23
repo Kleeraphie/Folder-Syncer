@@ -255,41 +255,46 @@ public class GUI extends JFrame {
 	private boolean checkEntries() {
 		if (parent.getText().equals("")) {
 
-			String message = "Im Feld \"Startverzeichnis\" muss ein Pfad angegeben sein!";
+			String message = Main.getLanguage().getText("messages.no_start_dir");
 
-			JOptionPane.showMessageDialog(this, message, "Fehler!", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(this, message, Main.getLanguage().getText("messages.error_title"),
+					JOptionPane.ERROR_MESSAGE);
 
 			return false;
 
 		} else if (child.getText().equals("")) {
 
-			String message = "Im Feld \"Zielverzeichnis\" muss ein Pfad angegeben sein!";
+			String message = Main.getLanguage().getText("messages.no_target_dir");
 
-			JOptionPane.showMessageDialog(this, message, "Fehler!", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(this, message, Main.getLanguage().getText("messages.error_title"),
+					JOptionPane.ERROR_MESSAGE);
 
 			return false;
 		}
 
 		if (!new File(parent.getText()).exists()) {
-			String message = "Das Startverzeichnis existiert nicht!";
+			String message = Main.getLanguage().getText("messages.start_dir_non_existent");
 
-			JOptionPane.showMessageDialog(this, message, "Fehler!", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(this, message, Main.getLanguage().getText("messages.error_title"),
+					JOptionPane.ERROR_MESSAGE);
 
 			return false;
 		} else if (!new File(child.getText()).exists()) {
 
-			String message = "Das Zielverzeichnis existiert nicht!";
+			String message = Main.getLanguage().getText("messages.target_dir_non_existent");
 
-			JOptionPane.showMessageDialog(this, message, "Fehler!", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(this, message, Main.getLanguage().getText("messages.error_title"),
+					JOptionPane.ERROR_MESSAGE);
 
 			return false;
 		}
 
 		if (parent.getText().equals(child.getText())) {
 
-			String message = "Das Start- und Zielverzeichnis sind identisch!";
+			String message = Main.getLanguage().getText("messages.same_dirs");
 
-			JOptionPane.showMessageDialog(this, message, "Fehler!", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(this, message, Main.getLanguage().getText("messages.error_title"),
+					JOptionPane.ERROR_MESSAGE);
 
 			return false;
 		}
@@ -329,60 +334,66 @@ public class GUI extends JFrame {
 		if (filesChanged == new File(child.getText()).listFiles().length) {
 			// Anzahl der geänderten Dateien == der Anzahl der Dateien im Zielverzeichnis
 
-			String message = "Es wurden alle Dateien geändert.";
+			String message = Main.getLanguage().getText("messages.success");
 
-			JOptionPane.showMessageDialog(null, message, "Erfolg!", JOptionPane.INFORMATION_MESSAGE);
+			JOptionPane.showMessageDialog(null, message, Main.getLanguage().getText("messages.success_title"),
+					JOptionPane.INFORMATION_MESSAGE);
 
 		} else {
 
 			if (filesChanged > 0) {
 				// Es wurden Dateien geändert, aber nicht alle
 
-				String message = String.format("%s von %s Dateien geändert. Der Rest war gleich.", filesChanged,
-						new File(child.getText()).listFiles().length);
+				String message = Main.getLanguage().getText("messages.success_or_equal")
+						.replaceFirst("%s", String.valueOf(filesChanged))
+						.replaceFirst("%s", String.valueOf(new File(child.getText()).listFiles().length));
 
-				JOptionPane.showMessageDialog(null, message, "Warnung!", JOptionPane.WARNING_MESSAGE);
+				JOptionPane.showMessageDialog(null, message, Main.getLanguage().getText("messages.success_title"),
+						JOptionPane.INFORMATION_MESSAGE);
 
 			} else {
 				// Es wurden keine Dateien geändert
 
-				String message = "Es wurden keine Dateien geändert, da alle Dateien gleich sind.";
+				String message = Main.getLanguage().getText("messages.all_equal");
 
-				JOptionPane.showMessageDialog(null, message, "Warnung!", JOptionPane.WARNING_MESSAGE);
+				JOptionPane.showMessageDialog(null, message, Main.getLanguage().getText("messages.warning_title"),
+						JOptionPane.WARNING_MESSAGE);
 
 			}
 
 			if (filesFailed == new File(child.getText()).listFiles().length) {
 				// Beim Synchronisieren jeder Datei ist ein Fehler aufgetreten
 
-				String message = "Keine Datei konnte aufgrund eines Fehlers geändert werden.";
+				String message = Main.getLanguage().getText("messages.all_error");
 
-				JOptionPane.showMessageDialog(null, message, "Fehler!", JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(null, message, Main.getLanguage().getText("messages.error_title"),
+						JOptionPane.ERROR_MESSAGE);
 
 			} else if (filesFailed > 0) {
 				// Synchronisierung einiger Dateien ist fehl geschlagen
 
-				String message = String.format(
-						"%s von %s Dateien konnten aufgrund eines Fehlers nicht geändert werden.", filesFailed,
-						new File(child.getText()).listFiles().length);
+				String message = Main.getLanguage().getText("messages.some_error")
+						.replaceFirst("%s", String.valueOf(filesChanged))
+						.replaceFirst("%s", String.valueOf(new File(child.getText()).listFiles().length));
 
-				JOptionPane.showMessageDialog(null, message, "Fehler!", JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(null, message, Main.getLanguage().getText("messages.error_title"),
+						JOptionPane.ERROR_MESSAGE);
 
 			}
 
 		}
 
 	}
-	
+
 	public void reload() {
-		
+
 		getContentPane().removeAll();
-		
+
 		buildWindow();
 		buildLabels();
 		buildTextfields();
 		buildButtons();
-		
+
 	}
 
 }

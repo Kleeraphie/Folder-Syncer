@@ -105,6 +105,28 @@ public class Language {
 
 					Texts.put("modes", nestedMap3);
 					break;
+				
+				case "messages":
+					HashMap<String, String> nestedMap4 = new HashMap<>();
+					
+					for (int i = 0; i < 15; i++) {
+
+						if (i == 3 || i == 9) {
+							bfr.readLine();
+							continue;
+						}
+							
+						
+						line = bfr.readLine();
+						texts = line.split(":");
+						texts[0] = texts[0].trim();
+						texts[1] = texts[1].trim();
+						
+						nestedMap4.put(texts[0], texts[1]);
+					}
+					
+					Texts.put("messages", nestedMap4);
+					break;
 
 				}
 

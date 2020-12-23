@@ -1,6 +1,8 @@
 language: English
+
 windows:
     settings: Settings
+
 texts:
     start_dir: Start directory
     target_dir: Target directory
@@ -8,7 +10,25 @@ texts:
     sync: Synchronise
     language: Language
     save: Save
+
 modes:
     change_date: Change date
     all: All
     content_change: Content change
+
+messages:
+    success_title: Success!
+    warning_title: Warning!
+    error_title: Error!
+
+    all_success: All Files have been changed.
+    success_or_equal: %s of %s were changed. The rest was equal.
+    all_equal: No files were changed because they are all equal.
+    all_error: No files were changed because of an error.
+    some_error: %s of %s were changed because of an error.
+
+    no_start_dir: The field "Start directory" cannot be empty!
+    no_target_dir: The field "Target directory" cannot be empty!
+    start_dir_non_existent: The start directory does not exist!
+    target_dir_non_existent: The target directory does not exist!
+    same_dirs: The start directory and target directory cannot be the same!
