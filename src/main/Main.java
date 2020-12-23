@@ -1,8 +1,9 @@
 package main;
 
 import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
 
+import config.Config;
+import config.Language;
 import gui.GUI;
 
 /**
@@ -13,7 +14,7 @@ import gui.GUI;
  * ersetzen soll.
  * 
  * @author Raphael Kleebaum
- * @version 1.0.1
+ * @version 1.2.0
  * @since 31.03.2020
  *
  */
@@ -21,17 +22,22 @@ import gui.GUI;
 public class Main {
 
 	public static GUI gui;
+	private static Language lang;
+	private static Config config;
+	public static String currentLang;
 
 	public static void main(String[] args) {
 
 		// Setzen des LookAndFeels des Programms auf das LookAndFeel des Systems
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException
-				| UnsupportedLookAndFeelException e1) {
-			e1.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
-
+		
+		lang = new Language();
+		config = new Config();
+		
 		gui = new GUI();
 	}
 
@@ -41,6 +47,14 @@ public class Main {
 	 */
 	public static GUI getGui() {
 		return gui;
+	}
+	
+	public static Language getLanguage() {
+		return lang;
+	}
+	
+	public static Config getConfig() {
+		return config;
 	}
 
 }

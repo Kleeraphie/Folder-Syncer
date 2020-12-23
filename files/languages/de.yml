@@ -1,0 +1,15 @@
+language: Deutsch
+windows:
+    settings: Einstellungen
+texts:
+    start_dir: Startverzeichnis
+    target_dir: Zielverzeichnis
+    sync_mode: Sync-Modus
+    sync: Synchronisieren
+    language: Sprache
+    save: Speichern
+modes:
+    change_date: Änderungsdatum
+    all: Alle
+    content_change: Inhaltliche Änderung
+encoding: UTF-8

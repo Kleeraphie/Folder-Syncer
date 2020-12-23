@@ -3,6 +3,9 @@ package gui;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.Set;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -26,6 +29,7 @@ public class Settings extends JFrame {
 		buildButtons();
 
 		pack();
+		setLocationRelativeTo(Main.getGui());
 		setVisible(true);
 
 	}
@@ -35,10 +39,8 @@ public class Settings extends JFrame {
 
 		c = new GridBagConstraints();
 		c.fill = GridBagConstraints.VERTICAL;
-
-		setSize(400, 300);
-		setTitle("Einstellungen");
-		setLocationRelativeTo(Main.getGui());
+		
+		setTitle(Main.getLanguage().getText("windows.settings"));
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		setResizable(false);
 		requestFocus();
@@ -46,28 +48,33 @@ public class Settings extends JFrame {
 
 	}
 
+	
 	private void buildLabels() {
 
+		c.anchor = GridBagConstraints.LINE_START;
 		c.gridx = 0;
 		c.gridy = 0;
-		c.insets = new Insets(25, 25, 25, 5);
+		c.insets = new Insets(55, 75, 25, 5); // TODO: 55 damit label mittig von jcb ist; müsste auch anders gehen
 
-		JLabel lang = new JLabel("Sprache:");
+		JLabel lang = new JLabel(Main.getLanguage().getText("texts.language") + ":");
 		add(lang, c);
 
 	}
 
 	private void buildTextfields() {
 
-		c.insets = new Insets(25, 0, 20, 25);
+		c.anchor = GridBagConstraints.CENTER;
 		c.gridx = 1;
-
+		c.insets = new Insets(50, 0, 20, 75);
+		
 		langs = new JComboBox<String>();
-		// TODO: Sprachen aus den Dateien auslesen
-		String[] langList = { "English", "Deutsch" };
+		Set<String> langList = Main.getLanguage().getLanguages().keySet();
 
 		for (String current : langList)
 			langs.addItem(current);
+
+		// ausgewählte Sprache auf aktuelle Sprache setzen
+		langs.setSelectedItem(Main.getConfig().getCurrentLanguage());
 
 		add(langs, c);
 
@@ -78,9 +85,19 @@ public class Settings extends JFrame {
 		c.gridx = 0;
 		c.gridy = 1;
 		c.gridwidth = 2;
-		c.insets = new Insets(0, 0, 25, 0);
+		c.insets = new Insets(0, 0, 50, 0);
 
-		JButton save = new JButton("Speichern");
+		JButton save = new JButton(Main.getLanguage().getText("texts.save"));
+		save.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				Main.getConfig().setCurrentLanguage((String) langs.getSelectedItem());
+				Main.getGui().reload();
+				dispose();
+			}
+		});
+		
 		add(save, c);
 
 	}

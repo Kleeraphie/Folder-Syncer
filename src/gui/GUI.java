@@ -20,6 +20,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
+import main.Main;
 import synchroniser.SynchronisingOptions;
 
 public class GUI extends JFrame {
@@ -41,6 +42,7 @@ public class GUI extends JFrame {
 		buildButtons();
 
 		pack();
+		setLocationRelativeTo(null);
 		setVisible(true);
 
 	}
@@ -50,9 +52,7 @@ public class GUI extends JFrame {
 
 		c = new GridBagConstraints();
 
-		setSize(400, 300);
-		setTitle("FolderSyncer");
-		setLocationRelativeTo(null);
+		setTitle("Folder Synchroniser");
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setResizable(false);
 		requestFocus();
@@ -73,22 +73,23 @@ public class GUI extends JFrame {
 
 		c.insets.top = 25;
 
-		parentL = new JLabel("Startverzeichnis:");
+		parentL = new JLabel(Main.getLanguage().getText("texts.start_dir") + ":");
 		add(parentL, c);
 
 		c.gridy = 1;
 		c.insets.top = 0;
 
-		childL = new JLabel("Zielverzeichnis:");
+		childL = new JLabel(Main.getLanguage().getText("texts.target_dir") + ":");
 		add(childL, c);
 
 		c.gridy = 2;
-		syncMode = new JLabel("Sync-Modus:");
+		syncMode = new JLabel(Main.getLanguage().getText("texts.sync_mode") + ":");
 		add(syncMode, c);
 
 	}
 
 	// TODO: JCB ist 1px kürzer als TextFields (sichtbar)
+	// (bei anderen Sprachen mehr/weniger px)
 	private void buildTextfields() {
 		// Bau der einzelnen Textfelder im JFrame
 
@@ -120,7 +121,11 @@ public class GUI extends JFrame {
 		// Bau der JComboBox zur Auswahl des Sync-Modus
 		jcb = new JComboBox<String>();
 
-		String[] jcbList = { "Änderungsdatum", "Alle", "Inhaltliche Änderung" };
+		String[] jcbList = new String[3];
+
+		jcbList[0] = Main.getLanguage().getText("modes.change_date");
+		jcbList[1] = (Main.getLanguage().getText("modes.all"));
+		jcbList[2] = (Main.getLanguage().getText("modes.content_change"));
 
 		for (String current : jcbList)
 			jcb.addItem(current);
@@ -206,7 +211,7 @@ public class GUI extends JFrame {
 		c.gridwidth = 3;
 
 		// Button um die Synchronisierung zu beginnen
-		sync = new JButton("Synchronisieren");
+		sync = new JButton(Main.getLanguage().getText("texts.sync"));
 		sync.addActionListener(new ActionListener() {
 
 			// TODO: vllt. klug returns setzen um rechenaufwand zu minimieren
@@ -222,19 +227,19 @@ public class GUI extends JFrame {
 
 		c.anchor = GridBagConstraints.LINE_END;
 		c.gridx = 1;
-		
+
 		settings = new JButton();
-		settings.setPreferredSize(new Dimension(32,32));
+		settings.setPreferredSize(new Dimension(32, 32));
 		settings.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				new Settings();
-				
+
 			}
 		});
 		add(settings, c);
-		
+
 		// Icon für den Einstellungen-Button laden und setzen
 		try {
 			icon = ImageIO.read(new File("images/settings.png"));
@@ -367,6 +372,17 @@ public class GUI extends JFrame {
 
 		}
 
+	}
+	
+	public void reload() {
+		
+		getContentPane().removeAll();
+		
+		buildWindow();
+		buildLabels();
+		buildTextfields();
+		buildButtons();
+		
 	}
 
 }

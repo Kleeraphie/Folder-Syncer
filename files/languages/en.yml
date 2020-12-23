@@ -1,0 +1,14 @@
+language: English
+windows:
+    settings: Settings
+texts:
+    start_dir: Start directory
+    target_dir: Target directory
+    sync_mode: Sync-Mode
+    sync: Synchronise
+    language: Language
+    save: Save
+modes:
+    change_date: Change date
+    all: All
+    content_change: Content change
