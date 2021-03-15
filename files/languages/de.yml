@@ -20,13 +20,13 @@ messages:
     success_title: Erfolg!
     warning_title: Warnung!
     error_title: Fehler!
-
+    
     success: Es wurden alle Dateien geändert.
     success_or_equal: %s von %s Dateien geändert. Der Rest war gleich.
     all_equal: Es wurden keine Dateien geändert, da alle Dateien gleich sind.
     all_error: Keine Datei konnte aufgrund eines Fehlers geändert werden.
     some_error: %s von %s Dateien konnten aufgrund eines Fehlers nicht geändert werden.
-
+    
     no_start_dir: Im Feld "Startverzeichnis" muss ein Pfad angegeben sein!
     no_target_dir: Im Feld "Zielverzeichnis" muss ein Pfad angegeben sein!
     start_dir_non_existent: Das Startverzeichnis existiert nicht!

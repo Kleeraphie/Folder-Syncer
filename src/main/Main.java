@@ -3,7 +3,6 @@ package main;
 import javax.swing.UIManager;
 
 import config.Config;
-import config.Language;
 import gui.GUI;
 
 /**
@@ -22,7 +21,7 @@ import gui.GUI;
 public class Main {
 
 	public static GUI gui;
-	private static Language lang;
+	private static Config lang;
 	private static Config config;
 	public static String currentLang;
 
@@ -35,7 +34,7 @@ public class Main {
 			e.printStackTrace();
 		}
 		
-		lang = new Language();
+		lang = new Config();
 		config = new Config();
 		
 		gui = new GUI();
@@ -49,7 +48,7 @@ public class Main {
 		return gui;
 	}
 	
-	public static Language getLanguage() {
+	public static Config getLanguage() {
 		return lang;
 	}
 	

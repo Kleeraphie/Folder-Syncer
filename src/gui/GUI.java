@@ -73,23 +73,23 @@ public class GUI extends JFrame {
 
 		c.insets.top = 25;
 
-		parentL = new JLabel(Main.getLanguage().getText("texts.start_dir") + ":");
+		parentL = new JLabel(Main.getConfig().getText("texts.start_dir") + ":");
 		add(parentL, c);
 
 		c.gridy = 1;
 		c.insets.top = 0;
 
-		childL = new JLabel(Main.getLanguage().getText("texts.target_dir") + ":");
+		childL = new JLabel(Main.getConfig().getText("texts.target_dir") + ":");
 		add(childL, c);
 
 		c.gridy = 2;
-		syncMode = new JLabel(Main.getLanguage().getText("texts.sync_mode") + ":");
+		syncMode = new JLabel(Main.getConfig().getText("texts.sync_mode") + ":");
 		add(syncMode, c);
 
 	}
 
-	// TODO: JCB ist 1px kürzer als TextFields (sichtbar)
-	// (bei anderen Sprachen mehr/weniger px)
+	// TODO: JCB kürzer als TextFields
+	// (bei anderen Sprachen mehr/weniger)
 	private void buildTextfields() {
 		// Bau der einzelnen Textfelder im JFrame
 
@@ -120,12 +120,13 @@ public class GUI extends JFrame {
 
 		// Bau der JComboBox zur Auswahl des Sync-Modus
 		jcb = new JComboBox<String>();
+		jcb.setPrototypeDisplayValue("############");
 
 		String[] jcbList = new String[3];
 
-		jcbList[0] = Main.getLanguage().getText("modes.change_date");
-		jcbList[1] = (Main.getLanguage().getText("modes.all"));
-		jcbList[2] = (Main.getLanguage().getText("modes.content_change"));
+		jcbList[0] = Main.getConfig().getText("modes.change_date");
+		jcbList[1] = (Main.getConfig().getText("modes.all"));
+		jcbList[2] = (Main.getConfig().getText("modes.content_change"));
 
 		for (String current : jcbList)
 			jcb.addItem(current);
@@ -211,7 +212,7 @@ public class GUI extends JFrame {
 		c.gridwidth = 3;
 
 		// Button um die Synchronisierung zu beginnen
-		sync = new JButton(Main.getLanguage().getText("texts.sync"));
+		sync = new JButton(Main.getConfig().getText("texts.sync"));
 		sync.addActionListener(new ActionListener() {
 
 			// TODO: vllt. klug returns setzen um rechenaufwand zu minimieren
@@ -255,35 +256,35 @@ public class GUI extends JFrame {
 	private boolean checkEntries() {
 		if (parent.getText().equals("")) {
 
-			String message = Main.getLanguage().getText("messages.no_start_dir");
+			String message = Main.getConfig().getText("messages.no_start_dir");
 
-			JOptionPane.showMessageDialog(this, message, Main.getLanguage().getText("messages.error_title"),
+			JOptionPane.showMessageDialog(this, message, Main.getConfig().getText("messages.error_title"),
 					JOptionPane.ERROR_MESSAGE);
 
 			return false;
 
 		} else if (child.getText().equals("")) {
 
-			String message = Main.getLanguage().getText("messages.no_target_dir");
+			String message = Main.getConfig().getText("messages.no_target_dir");
 
-			JOptionPane.showMessageDialog(this, message, Main.getLanguage().getText("messages.error_title"),
+			JOptionPane.showMessageDialog(this, message, Main.getConfig().getText("messages.error_title"),
 					JOptionPane.ERROR_MESSAGE);
 
 			return false;
 		}
 
 		if (!new File(parent.getText()).exists()) {
-			String message = Main.getLanguage().getText("messages.start_dir_non_existent");
+			String message = Main.getConfig().getText("messages.start_dir_non_existent");
 
-			JOptionPane.showMessageDialog(this, message, Main.getLanguage().getText("messages.error_title"),
+			JOptionPane.showMessageDialog(this, message, Main.getConfig().getText("messages.error_title"),
 					JOptionPane.ERROR_MESSAGE);
 
 			return false;
 		} else if (!new File(child.getText()).exists()) {
 
-			String message = Main.getLanguage().getText("messages.target_dir_non_existent");
+			String message = Main.getConfig().getText("messages.target_dir_non_existent");
 
-			JOptionPane.showMessageDialog(this, message, Main.getLanguage().getText("messages.error_title"),
+			JOptionPane.showMessageDialog(this, message, Main.getConfig().getText("messages.error_title"),
 					JOptionPane.ERROR_MESSAGE);
 
 			return false;
@@ -291,9 +292,9 @@ public class GUI extends JFrame {
 
 		if (parent.getText().equals(child.getText())) {
 
-			String message = Main.getLanguage().getText("messages.same_dirs");
+			String message = Main.getConfig().getText("messages.same_dirs");
 
-			JOptionPane.showMessageDialog(this, message, Main.getLanguage().getText("messages.error_title"),
+			JOptionPane.showMessageDialog(this, message, Main.getConfig().getText("messages.error_title"),
 					JOptionPane.ERROR_MESSAGE);
 
 			return false;
@@ -334,9 +335,9 @@ public class GUI extends JFrame {
 		if (filesChanged == new File(child.getText()).listFiles().length) {
 			// Anzahl der geänderten Dateien == der Anzahl der Dateien im Zielverzeichnis
 
-			String message = Main.getLanguage().getText("messages.success");
+			String message = Main.getConfig().getText("messages.success");
 
-			JOptionPane.showMessageDialog(null, message, Main.getLanguage().getText("messages.success_title"),
+			JOptionPane.showMessageDialog(null, message, Main.getConfig().getText("messages.success_title"),
 					JOptionPane.INFORMATION_MESSAGE);
 
 		} else {
@@ -344,19 +345,19 @@ public class GUI extends JFrame {
 			if (filesChanged > 0) {
 				// Es wurden Dateien geändert, aber nicht alle
 
-				String message = Main.getLanguage().getText("messages.success_or_equal")
+				String message = Main.getConfig().getText("messages.success_or_equal")
 						.replaceFirst("%s", String.valueOf(filesChanged))
 						.replaceFirst("%s", String.valueOf(new File(child.getText()).listFiles().length));
 
-				JOptionPane.showMessageDialog(null, message, Main.getLanguage().getText("messages.success_title"),
+				JOptionPane.showMessageDialog(null, message, Main.getConfig().getText("messages.success_title"),
 						JOptionPane.INFORMATION_MESSAGE);
 
 			} else {
 				// Es wurden keine Dateien geändert
 
-				String message = Main.getLanguage().getText("messages.all_equal");
+				String message = Main.getConfig().getText("messages.all_equal");
 
-				JOptionPane.showMessageDialog(null, message, Main.getLanguage().getText("messages.warning_title"),
+				JOptionPane.showMessageDialog(null, message, Main.getConfig().getText("messages.warning_title"),
 						JOptionPane.WARNING_MESSAGE);
 
 			}
@@ -364,19 +365,19 @@ public class GUI extends JFrame {
 			if (filesFailed == new File(child.getText()).listFiles().length) {
 				// Beim Synchronisieren jeder Datei ist ein Fehler aufgetreten
 
-				String message = Main.getLanguage().getText("messages.all_error");
+				String message = Main.getConfig().getText("messages.all_error");
 
-				JOptionPane.showMessageDialog(null, message, Main.getLanguage().getText("messages.error_title"),
+				JOptionPane.showMessageDialog(null, message, Main.getConfig().getText("messages.error_title"),
 						JOptionPane.ERROR_MESSAGE);
 
 			} else if (filesFailed > 0) {
 				// Synchronisierung einiger Dateien ist fehl geschlagen
 
-				String message = Main.getLanguage().getText("messages.some_error")
+				String message = Main.getConfig().getText("messages.some_error")
 						.replaceFirst("%s", String.valueOf(filesChanged))
 						.replaceFirst("%s", String.valueOf(new File(child.getText()).listFiles().length));
 
-				JOptionPane.showMessageDialog(null, message, Main.getLanguage().getText("messages.error_title"),
+				JOptionPane.showMessageDialog(null, message, Main.getConfig().getText("messages.error_title"),
 						JOptionPane.ERROR_MESSAGE);
 
 			}

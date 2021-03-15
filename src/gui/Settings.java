@@ -40,7 +40,7 @@ public class Settings extends JFrame {
 		c = new GridBagConstraints();
 		c.fill = GridBagConstraints.VERTICAL;
 		
-		setTitle(Main.getLanguage().getText("windows.settings"));
+		setTitle(Main.getConfig().getText("windows.settings"));
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		setResizable(false);
 		requestFocus();
@@ -56,7 +56,7 @@ public class Settings extends JFrame {
 		c.gridy = 0;
 		c.insets = new Insets(55, 75, 25, 5); // TODO: 55 damit label mittig von jcb ist; müsste auch anders gehen
 
-		JLabel lang = new JLabel(Main.getLanguage().getText("texts.language") + ":");
+		JLabel lang = new JLabel(Main.getConfig().getText("texts.language") + ":");
 		add(lang, c);
 
 	}
@@ -68,7 +68,7 @@ public class Settings extends JFrame {
 		c.insets = new Insets(50, 0, 20, 75);
 		
 		langs = new JComboBox<String>();
-		Set<String> langList = Main.getLanguage().getLanguages().keySet();
+		Set<String> langList = Main.getConfig().getLanguages().keySet();
 
 		for (String current : langList)
 			langs.addItem(current);
@@ -87,7 +87,7 @@ public class Settings extends JFrame {
 		c.gridwidth = 2;
 		c.insets = new Insets(0, 0, 50, 0);
 
-		JButton save = new JButton(Main.getLanguage().getText("texts.save"));
+		JButton save = new JButton(Main.getConfig().getText("texts.save"));
 		save.addActionListener(new ActionListener() {
 			
 			@Override
